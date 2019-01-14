@@ -1,7 +1,7 @@
 <h1>淘宝某商品平均数据分析</h1>
 <h4>1.1 数据爬取</h4>
 <p>想要爬取天猫某品牌电视机的买家评论等相关信息，首先打开代码检查页面，在network下，不断加载新的评论页面，观察“Name”列文件的变化</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/1-tb/pic1.png"/>
+![](https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/1-tb/pic1.png)
 <p>找到爬虫入口，通过Preview确定有我们想要的数据以后，切换回Headers页面找到入口的URL，并对URL的组成进行分析，去掉不重要的部分，发现淘宝评论的json数据全部在
     
 ```    
