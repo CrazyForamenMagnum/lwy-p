@@ -1,28 +1,28 @@
-<h1>������ƸJAVA��λ���ݷ���</h1>
-<h5>1.2������ȡ</h5>
-<p>��ʵд�򵥵�����Ĳ��趼���Ǽ�������Ŀ��ҳ�棬�Ҽ�-���-network��ˢ��ҳ�桢�۲�仯����Ŀ��ȷ��������ڡ�Ȼ����Pythonȥ����Ϳ����ˡ�</h5>
-<p>�����ˣ�����Ŀ����վ����������Ƹ��û�й���ķ����ֶΣ����������ȷ���һ����ڵ�url��</h5>
+<h1>智联招聘JAVA岗位数据分析</h1>
+<h5>1.2数据爬取</h5>
+<p>其实写简单的爬虫的步骤都是那几个：打开目标页面，右键-检查-network，刷新页面、观察变化的项目，确认爬虫入口。然后用Python去请求就可以了。</h5>
+<p>本次目标网站——智联招聘并没有过多的反爬手段，还是照例先分析一下入口的url：</h5>
 
 ```
-https://fe-api.zhaopin.com/c/i/sou?&start=0&pageSize=90&cityId=489&workExperience=-1&education=-1&companyType=-1&employmentType=-1&jobWelfareTag=-1&kw=JAVA����&%%E5%%BC%%80%%E5%%8F%%91&kt=3&=2001&at=65184d91b8214a5295518713d55903c1&rt=c335788de08e4a6c9c7359dea0c15f80&_v=0.77728626&userCode=1021480743&x-zp-page-request-id=77032d662a0e41299828275c286df298-1545722424963-430574
+https://fe-api.zhaopin.com/c/i/sou?&start=0&pageSize=90&cityId=489&workExperience=-1&education=-1&companyType=-1&employmentType=-1&jobWelfareTag=-1&kw=JAVA开发&%%E5%%BC%%80%%E5%%8F%%91&kt=3&=2001&at=65184d91b8214a5295518713d55903c1&rt=c335788de08e4a6c9c7359dea0c15f80&_v=0.77728626&userCode=1021480743&x-zp-page-request-id=77032d662a0e41299828275c286df298-1545722424963-430574
 ```
 
-<p>��Ҫ�޸ĵ�ֻ�������ط���<br>
+<p>需要修改的只有两个地方：<br>
 start=0<br>
-��ʾ�ӵ�0����¼��ʼ<br>
-kw=JAVA����<br>
-Kw��ʾҪ�����ĸ�λ�Ĺؼ��ʣ�������Ҫ����JAVA������λ��������һ����޸ġ�
-�������򵥣��Ͳ���˵�ˣ��������ص㽲���ݵ�������������ϴ��</p>
+表示从第0条记录开始<br>
+kw=JAVA开发<br>
+Kw表示要搜索的岗位的关键词，本次主要分析JAVA开发岗位，所以这一项不用修改。
+爬虫代码简单，就不多说了，接下来重点讲数据的整理与数据清洗。</p>
 <br>
-<h5>1.2������ȡ</h5>
-<p>�Ҵ���Щjson��ʽ������������ȡ�˹�˾������˾���͡���˾λ�á���˾��ģ���������ơ���������Ҫ�󡢴�������������н�ꡢ����ˮƽҪ��ְλ���͡���˾������ʮһ���ֶΣ���Щ�ֶεĸ�ʽ����������Ҫ�ģ�����Ҫ����������</p>
+<h5>1.2数据提取</h5>
+<p>我从这些json格式的数据里面提取了公司名、公司类型、公司位置、公司规模、工作名称、工作经验要求、待遇福利、工作薪酬、教育水平要求、职位类型、公司积分这十一个字段，有些字段的格式不是我们想要的，所以要进行整理。</p>
 <br>
-<h5>1.3��������</h5>
-<p>����Ҫ������������н����һ�е����ݸ�ʽ��ԭ�������ݸ�ʽ��6K-8K��������Щ���嵽���ݵ����⣬���С�н�����顱�������ݵĴ��ڣ�û�а취���к����ķ���������Ҫ�������У��ֱ�����͹���low_salary����߹���high_salary���Լ� ƽ������avg_salary�����ҽ���н�����顱ȫ���ĳ�NaN����ֹ���Ժ��������ݷ������̫�����</p>
+<h5>1.3数据整理</h5>
+<p>首先要动手整理的是薪酬那一列的数据格式，原本的数据格式是6K-8K，除了这些具体到数据的以外，还有“薪酬面议”这种数据的存在，没有办法进行合理的分析。所以要新增三列，分别是最低工资low_salary、最高工资high_salary、以及 平均工资avg_salary，并且将“薪酬面议”全部改成NaN，防止它对后续的数据分析造成太大的误差。</p>
 
 ```
 for s in df_job['job_salary']:
-    if s == 'н������':
+    if s == '薪资面议':
         low_s = np.nan
         high_s = np.nan
     else:
@@ -39,7 +39,7 @@ df_job['high_salary'] = high_salary
 df_job['avg_salary'] = avg_salary
 ```
 
-<p>������һ���������������⣬����ע�⵽��˾���ڳ�����һ��Ҳ�Ǻ��ң���һЩ��ֻ��ʾ���У���һЩ��������أ�����Ҫ������ͳһһ�£�ֻ��Ҫ��ʾ�����м��ɡ�</p>
+<p>除了这一项数据有问题以外，可以注意到公司所在城市这一项也是很乱，有一些是只显示城市，有一些会带上区县，所以要把他们统一一下，只需要显示到地市即可。</p>
 
 ```
 citys = []
@@ -52,68 +52,68 @@ for loc in df_job['company_loc']:
 df_job['company_city'] = citys
 ```
 
-<p>���ڿ��Խ�dataframe�浽һ���µ�csv�У����������������Ѿ�����ˡ�</p>
+<p>现在可以将dataframe存到一个新的csv中，初步的数据整理已经完毕了。</p>
 
-<h4>2 �����ضԹ���н���Ӱ��</h4>
-<h5>2.1 ��˾���зֲ����</h5>
-<p>����ҹ�����ע��һ���ص���ǹ����ĳ����ˣ���ô���Ǿ���������JAVA������λ�ĳ��зֲ�����ɣ������ѡ���˸���ֱ�۵ĵ�ͼȥ���������λ��ȫ���������еķֲ�������õĻ���pyecharts�⡣<br>
-ʹ��pyecharts������ͼ��ʱ��Ҫ�����Ȱѵ�ͼ��װ�ϣ���Ȼ�ǿհ�һƬ�ġ�<br>
-��������ʮ�����࣬����Ҫ�������������ǵ����ʱ���֣������м�����ͼģ����û�м�¼��γ�ȵĳ��У�fine������һ�����Щ����ɾ���Ϳ����ˡ�#[���ձ���,��������,����ƽ��,��ǭ���ϡ�,]�⼸��������û�еġ�</p>
+<h4>2 单因素对工作薪酬的影响</h4>
+<h5>2.1 公司城市分布情况</h5>
+<p>大家找工作关注的一个重点就是工作的城市了，那么我们就先来看看JAVA开发岗位的城市分布情况吧，这次我选择了更加直观的地图去表现这个岗位在全国各个城市的分布情况，用的还是pyecharts库。<br>
+使用pyecharts来画地图的时候不要忘记先把地图包装上，不然是空白一片的。<br>
+城市数据十分整洁，不需要再做处理。但是导入的时候发现，还是有几个地图模块上没有记录经纬度的城市，fine，遍历一遍把那些数据删除就可以了。#[‘日本’,’澄迈’,’西平’,’黔西南’,]这几个城市是没有的。</p>
 
 ```
 city_count = df_job.groupby('company_city')['company_city'].count()
 city_data = []
-nocoordinate = ['�ձ�', '����', '��ƽ', 'ǭ����']
+nocoordinate = ['日本', '澄迈', '西平', '黔西南']
 for item in zip(city_count.index, city_count.values):
     if item[0] in nocoordinate:
-        continue    #����ѭ�������������ھ�γ�ȵĳ������������ô洢��city_data
+        continue    #跳出循环：遇到不存在经纬度的城市跳过，不用存储到city_data
     city_data.append(item)
 #print(city_data)
-geo = Geo("��˾���зֲ����", "data from ZHILIAN", title_color="#fff", title_pos="center", width=800, height=600,
+geo = Geo("公司城市分布情况", "data from ZHILIAN", title_color="#fff", title_pos="center", width=800, height=600,
           background_color='#404a59')
 attr, value = geo.cast(city_data)
-geo.add("���зֲ����", attr, value, visual_range=[0, 360], visual_text_color="#fff", symbol_size=10, is_visualmap=True)
+geo.add("城市分布情况", attr, value, visual_range=[0, 360], visual_text_color="#fff", symbol_size=10, is_visualmap=True)
 ```
 
-OUTPUT��
-<img src="pic1.png">
+OUTPUT：
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic1.png">
 
-Ϊ�˸�ֱ�۵��˽�ֲ����ݵ�������ټ��ϸ�����ͼ�ɣ�������ͼ��ʱ������Щ����ֻ������һ���Σ�����������ͼ��ò���̫���ۣ����ݶ���������������ҽ�����Ƶ����ʮ�����µĳ���ɾ�����ˡ�
-#��˾�ֲ�����ͳ��
+为了更直观的了解分布数据的情况，再加上个条形图吧，加条形图的时候发现有些城市只出现了一两次，但是让整个图变得不是太美观，数据都看不清楚，所以我将出现频数在十次以下的城市删除掉了。
+#公司分布城市统计
 
 ```
-#ɾ�����ִ�������10�εĳ���
+#删除出现次数少于10次的城市
 for index, value in city_count.items():
     if value < 10:
         city_count = city_count.drop(index)
     else:
         continue
-bar_city = Bar("��˾�ֲ�����ͳ��")
-bar_city.add("����", city_count.index, city_count.values, is_label_show=True, xaxis_interval=0, xaxis_rotate=-45)
+bar_city = Bar("公司分布城市统计")
+bar_city.add("城市", city_count.index, city_count.values, is_label_show=True, xaxis_interval=0, xaxis_rotate=-45)
 ```
 
-OUTPUT��
-<img src="pic2.png">
-<p>�ӵ�ͼ�Ͽ��Կ����������λ�����ֲ��ڶ����Լ����ϲ�������������������ڶ������ܼ�����ߵ�Ҫ�����������������ޡ��齭�����ޣ�����������������࣬��962����λ��ǰ�������������ڡ��������ɶ����Ϻ����人����ͳ�ƽ����ʾ����70%���ϵĸ�λ�ֲ���һ�߳��С�</p>
+OUTPUT：
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic2.png">
+<p>从地图上可以看出，这个岗位基本分布在东部以及东南部，西部的数量大大少于东部。密集度最高的要数华北、长江三角洲、珠江三角洲，其中深圳市需求最多，有962个岗位，前五名依次是深圳、北京、成都、上海、武汉，据统计结果显示，有70%以上的岗位分布在一线城市。</p>
 <br>
-<h5>2.2��˾��ģ����˾����ͳ��</h5>
-<p>��Ϊһ��Ӧ��������������ȥ��˾����һ�£��ǽ�������������JAVA���������λ�Ĺ�˾���ͼ���˾��ģ�ɡ�<br>
-�ӱ�ͼ�Ͽ��Կ�����ռ��������100-499�ˣ���ξ���500-999�ˣ�������JAVA��Ʒ�Ĺ�˾��ģ�ձ鶼����̫С��<br>
-��˾������Ҫ���Ǽ�������Ӫ���ɷ�����ҵ��</p>
+<h5>2.2公司规模及公司类型统计</h5>
+<p>作为一个应届生，都是想先去大公司锻炼一下，那接下来就来看看JAVA分析这个岗位的公司类型及公司规模吧。<br>
+从饼图上可以看出，占比最多的是100-499人，其次就是500-999人，看来做JAVA产品的公司规模普遍都不算太小。<br>
+公司类型主要还是集中在民营及股份制企业。</p>
 <br>
-<h5>2.3��ͬѧ����ְλ��Ŀ</h5>
-<img src="pic3.png">
-���ѧ��Ҫ�����Ļ��Ǵ�ר������JAVA������λ��Ƹ���ǱȽ�ע�ؼ�����ѧ��Ҳ������ô��Ҫ�ġ�
+<h5>2.3不同学历的职位数目</h5>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic3.png">
+最低学历要求最多的还是大专，看来JAVA开发岗位招聘还是比较注重技术，学历也不是那么重要的。
 
-<h5>2.4��ͬ����ĸ�λ����</h5>
-<img src="pic4.png">
+<h5>2.4不同经验的岗位需求</h5>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic4.png">
 
-<h5>2.5ƽ�����ʷֲ�</h5>
-<p>����ƽ�����ʶ��Ǿ�����ֵ��ֱ��ͳ��̫�����ӣ��ȸ����Ƿָ��顣��4K~20K֮���8�飬���Ϊ2K������С��4K�ʹ���20Kһ����ʮ���飬����ƽ�������з��鲢����֮�󼴿�����ͼ��</p>
+<h5>2.5平均工资分布</h5>
+<p>由于平均工资都是具体数值，直接统计太过复杂，先给它们分各组。在4K~20K之间分8组，间隔为2K，加上小于4K和大于20K一共有十个组，遍历平均工资列分组并计数之后即可做出图：</p>
 
 ```
 def salary_div(salarylist):
-    """�Ƚ����ʷֳ�9������"""
+    """先将工资分成9个区间"""
     s_4k = 0
     s_4_6k = 0
     s_6_8k = 0
@@ -153,62 +153,62 @@ def salary_div(salarylist):
     return df_salary_rank
 ```
 
-<p>ƽ��������Ҫ������4~8K����ߵ��ܵ�20K���ϣ���Ȼ��ǱȽϴ�ġ�<br>
-������������Թ���н������ھ�����������ķ�����</p>
+<p>平均工资主要集中在4~8K，最高的能到20K以上，跨度还是比较大的。<br>
+接下来将会针对工作薪酬这个口径做具体深入的分析。</p>
 <br>
-<h4>3 �빤��н����ص�����</h4>
-<h5>3.1��ͬ���͵Ĺ�˾��ƽ����н</h5>
-<p>������ҵ��λһֱ�Ǵ�Һ������Ĺ�����λ���������������ͬ���͵Ĺ�˾��ƽ��н���Ƕ��ٰɡ�</p>
-<img src="">
+<h4>3 与工作薪酬相关的属性</h4>
+<h5>3.1不同类型的公司的平均月薪</h5>
+<p>国企、事业单位一直是大家很向往的工作单位，下面就来看看不同类型的公司的平均薪酬是多少吧。</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic5.png">
 
-<p>ƽ��������ߵľ�Ȼ��������壬��͵������У������żȻ����ɣ���Ϊ���г��ֵ���Ƹ��¼ֻ��һ����������̫������壬��ȥ��͵����������˾��ƽ������������̫��</p>
+<p>平均工资最高的竟然是社会团体，最低的是银行，大概是偶然现象吧，因为银行出现的招聘条录只有一条，不具有太大的意义，除去最低的那项，其它公司的平均工资相差都不是太大。</p>
 <br>
-<h5>3.2��ͬ���������Ӧ��ƽ����н</h5>
-<img src="">
-<p>��ȥ�����ޡ��������飬ƽ����н�͹�������֮�������Ե���������ϵ����������Խ����н��ҲԽ�ߡ�</p>
-<p>�ٰѺ�ͼ��������</p>
-<img src="">
-<p>�˴��ĺ�ͼ�е���֣���ͼ�ĺ�������Ӧ�������۲�ֵ�����������ֵ����5-10��Ϊ����<br>
-���۲�ֵ=Q3+1.5��Q3-Q1��=21500+1.5*��21500-14000��=32750������ͼ�еĺ���ȥ����60000������32750������Ӧ���õ�������ʾ������Ⱥ�㡣<br>
-���ҹ۲쵽һ���Ƚ����ص����⡰�޾��顱��Q1��Q2��Q3����ȵģ�˵������Դ���ܴ������ص��ظ����⡣����ԭ���ݷ������м�����˾���˶����ظ����ݣ�Ӱ����������������ж��ظ��ı�׼����˾����ͬ��ְλ������ͬС�졢�����ص�һ��������Ҫ���Ĵ����ǽ������˾����������ɾ����<br>
-��һ����˾������800���ظ����ݣ�����Ӱ���˷���������������ֽ�ǰ���ͼ���¸�����һ�顣<br>
-֮��Ľ���������ģ�</p>
-<img src="">
+<h5>3.2不同工作经验对应的平均月薪</h5>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic6.png">
+<p>除去“不限”工作经验，平均月薪和工作经验之间有明显的正比例关系，工作经验越长，薪酬也越高。</p>
+<p>再把盒图做出来：</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic7.png">
+<p>此处的盒图有点奇怪，盒图的胡须上限应该是最大观测值，而不是最大值，以5-10年为例：<br>
+最大观测值=Q3+1.5（Q3-Q1）=21500+1.5*（21500-14000）=32750，但是图中的胡须去到了60000，大于32750的数据应该用点标出，表示那是离群点。<br>
+并且观察到一个比较严重的问题“无经验”的Q1、Q2、Q3是相等的，说明数据源可能存在严重的重复问题。查了原数据发现是有几个公司发了多条重复数据，影响了整个结果。（判断重复的标准：公司名相同、职位描述大同小异、工作地点一样）这里要做的处理是将这个公司的所有数据删除。<br>
+有一个公司甚至有800条重复数据，严重影响了分析结果，所以我又将前面的图重新更新了一遍。<br>
+之后的结果是这样的：</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic8.png">
 
-<h5>3.3ѧ������н��Ӱ��</h5>
-<img src="">
-<p>���������һ���������ݣ���н�ܸߴ�125K���о��е����⣬�ҳ�ԭ���ݿ����£�<br>
-����һ�������˾��������վ����Ƹ��Ϣ��������н����10K-15K��������¼������ˣ������������ݣ��ַ�����͹��ʶ���0��������NaN����������Щ����ɾ���ɡ�</p>
+<h5>3.3学历对月薪的影响</h5>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic9.png">
+<p>这里出现了一条问题数据，月薪能高达125K，感觉有点问题，找出原数据看了下：<br>
+查了一下这个公司在其他网站的招聘信息，发现是薪酬是10K-15K，是数据录入错误了，修正这条数据，又发现最低工资都是0（可能是NaN？），把这些数据删掉吧。</p>
 
 ```
 df_job = df_job[~df_job['avg_salary'].isin([125000])]
 df_job = df_job[~df_job['avg_salary'].isin([0])]
 ```
 
-OUTPUT��
-<img src="">
-<p>���������Ѱζ��������������ר�ͱ������Ǻܴ󣬵���������������ѧ��н��ȴ�ר�ߣ���JAVA���������λ�ϣ�˶ʿ�о�����ƽ�����ʾ�Ȼ�ȱ��ƻ�Ҫ�ͣ����ѧ��Ϊ˶ʿ�о�������¼��8�����������Ϊ����û���㹻������ȥ���бȽϰɡ�</p>
+OUTPUT：
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic10.png">
+<p>结果很耐人寻味，大体来看，大专和本科相差不是很大，但是总体来讲本科学历薪酬比大专高，在JAVA开发这个岗位上，硕士研究生的平均工资竟然比本科还要低，最低学历为硕士研究生的条录有8条，大概是因为还是没有足够的样本去进行比较吧。</p>
 <br>
-<h5>3.4������������н�Ĺ�ϵ</h5>
-<img src="">
-<p>��߹��ʵ����ձ������ڳ�����ߵ����˱����ȱ������Ϻ���Ҫ��һ�㣬���ž��Ǻ����ˣ������˱��ͺ��ݶ�ֻ��һ����λ�����ų���ż�����󡣽����������ڸ�λ����ǰ6�����е���н�ó������������ڡ��������Ϻ����ɶ���֣�ݡ����ݣ���</p>
-<img src="">
-<p>�����ϡ��㡢�����Ĵ�һ�߳��е�н�껹�Ǳ�һ���һ�߳���Ҫ��һ�㡣</p>
+<h5>3.4工作城市与月薪的关系</h5>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic11.png">
+<p>最高工资的是日本，国内城市最高的是宜宾，比北京和上海还要高一点，接着就是湖州了，但是宜宾和湖州都只有一个岗位，不排除是偶发现象。接下来将国内岗位最多的前6个城市的月薪拿出来分析（深圳、北京、上海、成都、郑州、广州）：</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic12.png">
+<p>北、上、广、深这四大一线城市的薪酬还是比一般的一线城市要高一点。</p>
 <br>
-<h5>3.5 ѧ���������������н��Ӱ��</h5>
-<p>̽���굥����������빤��н��֮��Ĺ�ϵ�����������ǲ���ѧ���߾Ͳ���Ҫ�๤������Ҳ���нϸߵ�н�ꡣ
-��ѧ��Ϊ���ᡢ��������Ϊ���ᣬ��ƽ����нΪ��Ҫ���ݣ���������ͼ��</p>
-<img src="">
-<p>����ר���м������ݷֲ������㹻�ľ��ȣ�������ݿ�ȱ��<br>
-���ɵ�ͼ����Ϊhtml��ʽ����������ҳ�˴򿪣���������ʾ���ݣ��������½ǵ�ȡֵ��Χ���Բ鿴��ͬ��Χ�����ݷֲ������</p>
-<img src="">
-<p>����ѡȡ���е�������н�����䣬�������Ƿֲ��ڹ������޳���ѧ����Ըߵĵط������ǲ���ѧ���������������ϵ���Ƹ��λ��нҲ�ܸߡ�</p>
+<h5>3.5 学历、工作经验对月薪的影响</h5>
+<p>探讨完单方面的因素与工作薪酬之间的关系，再来看看是不是学历高就不需要多工作经验也能有较高的薪酬。
+以学历为横轴、工作经验为纵轴，以平均月薪为主要数据，画出热力图：</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic13.png">
+<p>（中专、中技的数据分布不是足够的均匀，造成数据空缺）<br>
+生成的图保存为html格式，可以在网页端打开，交互地显示数据，调整左下角的取值范围可以查看不同范围的数据分布情况：</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic14.png">
+<p>这里选取了中等至高月薪的区间，很明显是分布在工作年限长、学历相对高的地方。但是不限学历、工作资历较老的招聘岗位月薪也很高。</p>
 
-<h5>3.5 ����</h5>
-<p>���Դ�ŵó�һ������
-������������ѧ���ߡ������ص��ڡ���һ�߳��С�����ְ�����ҵ���н�깤���ļ���Ҫ���󣬹�˾���Ͷ���нӰ�첻��󣬵������ʹ�˾��н��ܿɹۡ���JAVA���������λ�����ѧ��û�����ƣ���ô��������ͷǳ���Ҫ��</p>
+<h5>3.5 结论</h5>
+<p>可以大概得出一个规则：
+工作资历长、学历高、工作地点在“超一线城市”的求职者能找到高薪酬工作的几率要更大，公司类型对月薪影响不算大，但是外资公司的薪酬很可观。在JAVA开发这个岗位，如果学历没有优势，那么工作经验就非常重要。</p>
 
-<h5>4 ��������</h5>
-<p>�õ������ݸ�ʽ�����룬ֱ��split�ִʺ�Ϳ��Լ�����ͼ�ˣ����ڽ�ȡ���ֶ��ǡ��ؼ��ʡ��ֶΣ����Ի����һЩ����Ҫ��Ҳ��������һ�³���Ƶ��������Щ�ʹ��ˡ�</p>
-<img src="">
-<p>������ĸ�����������һ�𡢽��ո�������н��١���Ч������ĩ˫�ݡ�</p>
+<h5>4 福利待遇</h5>
+<p>拿到的数据格式很整齐，直接split分词后就可以计数画图了，由于截取的字段是“关键词”字段，所以会出现一些技能要求，也可以限制一下出现频数，将这些词过滤。</p>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic15.png">
+<p>最基本的福利就是五险一金、节日福利、带薪年假、绩效奖金、周末双休。</p>
