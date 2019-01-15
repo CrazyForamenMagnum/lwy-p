@@ -62,7 +62,7 @@ def age_division(agelist):
 ```
 
 <p>然后通过这组数据画出饼图，但是还想了解具体每个年龄的人数，为了结果更加直观，我又加上了具体年龄分布的条形统计图。</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic1.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic1.png"/>
 <p>可以发现，人数最多的是40~45岁这个年龄段的人，占了61.95%，其中43岁的人数最多，有813人，占了总人数的13.51%。
 查了一下北京积分落户的申请要求：</p>
 
@@ -79,7 +79,7 @@ def age_division(agelist):
 <br>
 <h4>2.2籍贯省份</h4>
 <p>哪个地方的人最热衷于落户北京？</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic2.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic2.png/>
 <p>有一个问题让人很费解：原本是北京户口的97个北京人为何要参加积分落户，这个问题本人暂时无法查证。</p>
 <br>
 
@@ -93,10 +93,10 @@ for index, row in company_group.iterrows():
         company_group = company_group.drop(index)
 ```
 
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic3.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic3.pngg"/>
 
 <p>华为可谓独领风骚，以高出第二名近一倍的数量稳居第一，像中央电视台、首钢建设集团、百度、联想的人数也是不少的。再抽出人数最多的前10家公司看看年龄组成：</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic4.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic4.png"/>
 <p>平均年龄最高的是北京首钢建设集团，最低的是百度，这10个公司里年龄最低的出现在北京华为。</p>
 <br>
 <h4>2.4行业组成分析</h4>
@@ -105,9 +105,9 @@ for index, row in company_group.iterrows():
 由于并没有明确指出行业，只能从公司名称进行猜测，首先对公司名称进行分词，限制出现频率较高的词，例如“公司”、“有限公司”、“股份集团”等等，这些词汇没有统计意义。<br>
 然后，做出词云图：
 </p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic5.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic5.png"/>
 <p>可以看到，频次最高的词就是“信息技术”，换言之，在积分落户的人员中，最多的是信息技术行业的。点击统计图旁边的第三个图标（如上图高亮）可以看到频数统计：</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic6.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic6.png"/>
 
 <p>接下来需要手工抽取一些出现频次较高，并且能标志一个行业的词汇并包含在一个list中：</p>
 
@@ -123,7 +123,7 @@ words_df = pd.DataFrame({"segment": segments})
 ```
 
 <p>然后就可以以这些数据画出条形统计图了：</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/2-bjr/pic7.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic7.png"/>
 <p>但是这样的分析结果还是存在冗余的，譬如，建筑、建设、装饰这几个相似的词汇可以合并成一个列，总体来讲，行业分析在此处只能作为较为模糊的分析，但是还是可以明显看出，信息技术、咨询、工程、建设、投资、软件这些行业的人占比是明显高于其他行业的。</p>
 <p>在这里贴上一个来自百度的数据来结束本次的数据分析实验吧：</p>
 
