@@ -1,7 +1,7 @@
 <h1>淘宝某商品评论数据分析</h1>
 <h4>1.1 数据爬取</h4>
 <p>想要爬取天猫某品牌电视机的买家评论等相关信息，首先打开代码检查页面，在network下，不断加载新的评论页面，观察“Name”列文件的变化</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/1-tb/pic1.png">
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E7%BD%91%E7%BB%9C%E8%88%86%E6%83%85%E5%88%86%E6%9E%90/pic1.png">
 <p>找到爬虫入口，通过Preview确定有我们想要的数据以后，切换回Headers页面找到入口的URL，并对URL的组成进行分析，去掉不重要的部分，发现淘宝评论的json数据全部在
     
 ```    
@@ -48,7 +48,7 @@ if currentPage % 5 == 0:
 ```
 
 <p>折腾了许久终于拿到了些许数据，我的个人习惯是先将json数据爬取下来再用pandas库做数据提取，所以之前requests下来的数据都存在一个txt文件中（也可以是存在csv文件，怎么方便怎么来）</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/1-tb/pic2.png" />
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E7%BD%91%E7%BB%9C%E8%88%86%E6%83%85%E5%88%86%E6%9E%90/pic2.png" />
 <br>
 <h4>1.2数据提取</h4>
 <p>其实数据的存储也是很有规律的，每一页评论的json文件都只会占一行，所以读取文件的时候逐行读取就可以了。</p>
@@ -87,7 +87,7 @@ tb_contents.to_csv('tb_comments.csv', encoding='utf_8_sig')
 <br>
 <h4>2.1商品销量走势分析</h4>
 <p>通过pandas库简单的groupby以后，用pyecharts的Bar、Line做出每日评论数的走势图：</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/1-tb/pic3.png" />
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E7%BD%91%E7%BB%9C%E8%88%86%E6%83%85%E5%88%86%E6%9E%90/pic3.png" />
 <p>不难发现，在11月17日以前日均评论只有一条多一点，从17号就开始越来越多。</p>
 <p>每个用户从购买商品、签收商品、正式安装使用，加上11月11日是大型购物节，由于订单数目骤然增加，电商们发货速度有所下降、物流速度下降，用户正式收到货物并使用、登录平台进行评价的平均时间间隔有所延长，所以有理由推测11月17日以后增多的买家评论购买时间都是在11月11日，统计从11月17日至下一个购物节12月12日之间的评论数已经高达1570条，相比17日之前的评论数目，增幅相当的大。有理由说明“双十一”大大促进了电商的订单成交数。</p>
 <br>
@@ -168,4 +168,4 @@ words_stat = words_df.groupby('segment')['segment'].agg({"计数": np.size})   w
 ```
 
 <p>结果：</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-s/blob/master/Desktop/%E5%9B%BE%E7%89%87/1-tb/pic4.png"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E7%BD%91%E7%BB%9C%E8%88%86%E6%83%85%E5%88%86%E6%9E%90/pic4.png"/>
