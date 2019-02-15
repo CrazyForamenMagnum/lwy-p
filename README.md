@@ -79,9 +79,9 @@ OUTPUT：
 <img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98JAVA%E5%BC%80%E5%8F%91%E5%B2%97%E4%BD%8D%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/3-zl/pic1.png">
 
 为了更直观的了解分布数据的情况，再加上个条形图吧，加条形图的时候发现有些城市只出现了一两次，但是让整个图变得不是太美观，数据都看不清楚，所以我将出现频数在十次以下的城市删除掉了。
-#公司分布城市统计
 
 ```
+#公司分布城市统计
 #删除出现次数少于10次的城市
 for index, value in city_count.items():
     if value < 10:
