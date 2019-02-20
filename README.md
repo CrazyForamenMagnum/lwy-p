@@ -93,7 +93,7 @@ for index, row in company_group.iterrows():
         company_group = company_group.drop(index)
 ```
 
-<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic3.pngg"/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic3.png"/>
 
 <p>华为可谓独领风骚，以高出第二名近一倍的数量稳居第一，像中央电视台、首钢建设集团、百度、联想的人数也是不少的。再抽出人数最多的前10家公司看看年龄组成：</p>
 <img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic4.png"/>
