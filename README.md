@@ -79,7 +79,7 @@ def age_division(agelist):
 <br>
 <h4>2.2籍贯省份</h4>
 <p>哪个地方的人最热衷于落户北京？</p>
-<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic2.png/>
+<img src="https://github.com/CrazyForamenMagnum/lwy-p/blob/%E5%8C%97%E4%BA%AC%E7%A7%AF%E5%88%86%E8%90%BD%E6%88%B7%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90/2-bjr/pic2.png"/>
 <p>有一个问题让人很费解：原本是北京户口的97个北京人为何要参加积分落户，这个问题本人暂时无法查证。</p>
 <br>
 
